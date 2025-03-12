@@ -33,7 +33,7 @@ const views_dir = path.join(__dirname, 'src' , 'views');
 const PORT = process.env.PORT || 5000;
 
 app.use(cors())
-app.use(express.json()); // middleware to parse json data
+app.use(express.json({ limit: '50mb' })); // middleware to parse json data
 
 // set view 
 
