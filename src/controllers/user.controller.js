@@ -88,6 +88,21 @@ const get_user_by_id = async (req, res) => {
     }
 }
 
+const add_problem_to_user_by_id = async (req, res) => {
+    const { userId , problemId } = req.body;
+    console.log(userId , problemId ,"kk");
+    try{
+        const user = await User.findByIdAndUpdate(userId , 
+            { $push : { solved : problemId } } , {new : true});
+        // console.log(user);
+        return res.status(200).json({messege : "Problem added to user successfully" , data : user});
+    }catch(err){
+        return res.status(400).json({messege : "Problem add to user failed" , error : err.message});
+    }
+
+}
+
+
 const update_user_by_id = async (req, res) => {
     const { id } = req.params;
     const { username, avatar, email, password } = req.body;
@@ -126,5 +141,6 @@ export default {
     get_all_users,
     get_user_by_id,
     update_user_by_id,
-    delete_user_by_id
+    delete_user_by_id,
+    add_problem_to_user_by_id
 };

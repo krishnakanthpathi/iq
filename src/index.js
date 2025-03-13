@@ -19,7 +19,8 @@ import connectDB from './config/db.config.js';
 import user_route from './routes/user.route.js';
 import problem_route from './routes/problem.route.js';
 import doubt_route from './routes/doubt.route.js';
-import teacher_route from './routes/teacher.route.js';
+import ai_route from './routes/ai.route.js';
+// import teacher_route from './routes/teacher.route.js';
 
 // config 
 connectDB();
@@ -45,6 +46,7 @@ app.use(express.json({ limit: '50mb' })); // middleware to parse json data
 app.use("/api/users" , user_route)
 app.use("/api/problems" , problem_route)
 app.use("/api/doubts" , doubt_route)
+app.use("/api/ai" , ai_route)
 // app.use("/api/teachers" , teacher_route)
 
 
