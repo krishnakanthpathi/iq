@@ -6,7 +6,7 @@ dotenv.config();
 
 // create a user
 const create_user = async (req, res) => {
-    const { username, avatar , email, password, isAdmin } = req.body;
+    const { username, avatar , email, password, bio , isAdmin } = req.body;
     try{
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -18,12 +18,14 @@ const create_user = async (req, res) => {
             avatar,
             email,
             password: hashedPassword,
+            bio:bio,
             isAdmin
         });
 
         await user.save();
         return res.status(201).json({messege : "User created successfully" , data : user}); ;
     }catch(err){
+        console.log(err);
         return res.status(400).json({messege : "User creation failed" , error : err.message});
     }
 
@@ -31,8 +33,10 @@ const create_user = async (req, res) => {
 
 const login_user = async (req, res) => {
     const { email, password } = req.body;
+    console.log(req.body);
     try {
         const user = await User.findOne({ email });
+        console.log(user);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -40,7 +44,7 @@ const login_user = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         console.log(token);
         return res.status(200).json({ 
             message: "User logged in successfully", 
@@ -48,6 +52,7 @@ const login_user = async (req, res) => {
         });
     }
     catch (err) {
+        console.log(err);
         return res.status(400).json({ message: "User login failed", error: err.message });
     }
 }
@@ -82,6 +87,21 @@ const get_user_by_id = async (req, res) => {
         return res.status(400).json({messege : "User fetch failed" , error : err.message});
     }
 }
+
+const add_problem_to_user_by_id = async (req, res) => {
+    const { userId , problemId } = req.body;
+    console.log(userId , problemId ,"kk");
+    try{
+        const user = await User.findByIdAndUpdate(userId , 
+            { $push : { solved : problemId } } , {new : true});
+        // console.log(user);
+        return res.status(200).json({messege : "Problem added to user successfully" , data : user});
+    }catch(err){
+        return res.status(400).json({messege : "Problem add to user failed" , error : err.message});
+    }
+
+}
+
 
 const update_user_by_id = async (req, res) => {
     const { id } = req.params;
@@ -121,5 +141,6 @@ export default {
     get_all_users,
     get_user_by_id,
     update_user_by_id,
-    delete_user_by_id
+    delete_user_by_id,
+    add_problem_to_user_by_id
 };

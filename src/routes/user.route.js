@@ -12,7 +12,10 @@ user_router.post('/register', user_controller.create_user);
 
 // user_router.post('/create/all', user_controller.create_user_all);
 
-user_router.put('/:id',protect ,user_controller.update_user_by_id);
+user_router.put('/update/:id',protect ,user_controller.update_user_by_id);
+// user_router.put('/add/:id',protect ,user_controller.add_problem_to_user_by_id); // correct convention
+user_router.put('/add/' ,protect , user_controller.add_problem_to_user_by_id);
+
 user_router.delete('/:id',protect , user_controller.delete_user_by_id);
 
 
