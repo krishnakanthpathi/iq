@@ -51,15 +51,18 @@ const user_schema = new mongoose.Schema({
     },
     solved: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Problem"
+        ref: "Submission",
+        unique: true
     }],
     doubts_created: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Doubt"
+        ref: "Doubt",
+        unique: true    
     }],
     doubts_assigned: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Doubt"
+        ref: "Doubt",
+        unique: true
     }]
 }, { timestamps: true });
 

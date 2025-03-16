@@ -1,4 +1,5 @@
 import User from '../models/user.model.js';
+import Submission from '../models/submission.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -88,17 +89,28 @@ const get_user_by_id = async (req, res) => {
     }
 }
 
-const add_problem_to_user_by_id = async (req, res) => {
-    const { userId , problemId } = req.body;
-    console.log(userId , problemId ,"kk");
+const add_submission = async (req, res) => {
+    const { userId , problemId , description } = req.body;
+    console.log(userId , problemId , description ,"-- submission");
+    const submission = new Submission({
+        userId,
+        problemId,
+        description
+    });
     try{
-        const user = await User.findByIdAndUpdate(userId , 
-            { $push : { solved : problemId } } , {new : true});
-        // console.log(user);
-        return res.status(200).json({messege : "Problem added to user successfully" , data : user});
-    }catch(err){
-        return res.status(400).json({messege : "Problem add to user failed" , error : err.message});
+        const savedSubmission = await submission.save();
+        const submissionId = savedSubmission._id;
+        const user = await User.findById(userId);
+
+        user.solved.push(submissionId);
+        await user.save();
+
+        return res.status(201).json({messege : "Submission created successfully and added to user" , data : submission}); ;
     }
+    catch(err) {
+        return res.status(400).json({messege : "Submission creation failed" , error : err.message});
+    }
+    
 
 }
 
@@ -142,5 +154,5 @@ export default {
     get_user_by_id,
     update_user_by_id,
     delete_user_by_id,
-    add_problem_to_user_by_id
+    add_submission
 };
