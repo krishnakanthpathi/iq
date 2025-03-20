@@ -61,8 +61,7 @@ const problem_schema = new mongoose.Schema({
     }],
     createrId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "User", // removed createrId required: true
     }
 }, { timestamps: true });
 
