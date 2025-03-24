@@ -5,7 +5,7 @@ import { protect } from '../middlewares/auth.middleware.js';
 const user_router = new Router();
 
 user_router.get('/all' ,user_controller.get_all_users);
-user_router.get('/:id', protect ,user_controller.get_user_by_id);
+user_router.get('/:id' ,user_controller.get_user_by_id);
 
 user_router.post('/login', user_controller.login_user);
 user_router.post('/register', user_controller.create_user);
